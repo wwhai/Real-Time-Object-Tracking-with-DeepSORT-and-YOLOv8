@@ -62,6 +62,8 @@ ffmpegProcess = subprocess.Popen(
 while cap.isOpened():
     success, frame = cap.read()
     if success:
+        # 这里应该调用Rpc
+        # results = grpc.CallPredict(frame, verbose=False)
         results = model.predict(frame, verbose=False)
         annotated_frame = results[0].plot()
         for result in results:
