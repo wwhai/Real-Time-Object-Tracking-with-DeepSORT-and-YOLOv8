@@ -5,10 +5,16 @@ import torch
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load the YOLOv8 model
 model = YOLO("./yolov8n.pt").to(device=device)
+
 clazz = model.names
 
 # Open the video file
 video_path = "rtsp://192.168.1.210:554/av0_0"
+# results = model.predict(video_path, verbose=False, stream=True)
+# while True:
+#     for result in results:
+#         boxes = result.boxes
+#         probs = result.probs
 cap = cv2.VideoCapture(video_path)
 fps = int(cap.get(cv2.CAP_PROP_FPS))
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -80,8 +86,8 @@ while cap.isOpened():
                         (0, 0, 255),
                         font_thickness,
                     )
-        # resized_image = cv2.resize(annotated_frame, (640, 480))
-        # cv2.imshow("YOLOv8 Inference", resized_image)
+        resized_image = cv2.resize(annotated_frame, (640, 480))
+        cv2.imshow("YOLOv8 Inference", resized_image)
         if ffmpegProcess.returncode is None:
             ffmpegProcess.stdin.write(annotated_frame.tobytes())
         if cv2.waitKey(1) & 0xFF == ord("q"):
