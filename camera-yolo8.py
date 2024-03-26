@@ -3,6 +3,7 @@ from ultralytics import YOLO
 import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cpu")
 # Load the YOLOv8 model
 model = YOLO("./yolov8n.pt").to(device=device)
 
@@ -36,15 +37,15 @@ ffmpeg_command = [
     "-",  # 输入数据来自标准输入流
     "-c:v",
     "libx264",
-    # "-preset",
-    # "superfast",  # 编码速度
+    "-preset",
+    "superfast",  # 编码速度
     "-crf",
     "30",  # 编码质量（0-51，越小质量越高）
-    # "-tune",
-    # "zerolatency",  # 零延迟
+    "-tune",
+    "zerolatency",  # 零延迟
     "-f",
-    "mpegts",  # 输出为 MPEG-TS 格式
-    "http://127.0.0.1:9400/stream/ffmpegPush?liveId=AAA",
+    "flv",  # 输出为 MPEG-TS 格式
+    "rtmp://127.0.0.1:1935/live/testv001",
 ]
 
 import subprocess
@@ -86,7 +87,7 @@ while cap.isOpened():
                         (0, 0, 255),
                         font_thickness,
                     )
-        resized_image = cv2.resize(annotated_frame, (640, 480))
+        resized_image = cv2.resize(annotated_frame, (960, 640))
         cv2.imshow("YOLOv8 Inference", resized_image)
         if ffmpegProcess.returncode is None:
             ffmpegProcess.stdin.write(annotated_frame.tobytes())
