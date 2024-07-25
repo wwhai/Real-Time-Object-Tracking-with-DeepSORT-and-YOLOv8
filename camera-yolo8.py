@@ -10,7 +10,7 @@ model = YOLO("./yolov8n.pt").to(device=device)
 clazz = model.names
 
 # Open the video file
-video_path = "rtsp://192.168.1.210:554/av0_0"
+video_path = "rtsp://192.168.10.244:554/av0_0"
 # results = model.predict(video_path, verbose=False, stream=True)
 # while True:
 #     for result in results:

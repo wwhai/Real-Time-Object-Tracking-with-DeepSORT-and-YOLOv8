@@ -18,7 +18,7 @@ import cv2
 from ultralytics import YOLO
 
 model = YOLO("yolov8n.pt")
-results = model("rtsp://192.168.1.210:554/av0_0", stream=True)
+results = model("rtsp://192.168.10.244:554/av0_0", stream=True)
 ffmpeg_command = [
     "ffmpeg",
     "-err_detect",
